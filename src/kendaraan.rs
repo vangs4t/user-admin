@@ -13,3 +13,23 @@ pub mod sepeda {
             println!("Ini adalah kendaraan tenaga manusia");
         }
 }
+
+pub struct Mesin{
+    pub karbulator: String,
+    pub piston: String,
+    pub kopling: String,
+}
+
+pub trait Fungsi{
+    fn pengapian(&self, busi: bool);
+}
+
+impl Fungsi for Mesin {
+    fn pengapian(&self, busi: bool){
+        if busi {
+            println!("Kendaraaan nyala dengan piston {}", self.piston);
+        } else {
+            println!("Kendaraan mati")
+        }
+    }
+}

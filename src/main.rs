@@ -3,6 +3,11 @@ mod client;
 mod matematika;
 mod kendaraan;
 
+use kendaraan as transportasi;
+
+use crate::kendaraan::*;
+use crate::kendaraan::Mesin;
+
 /*untuk penggunaan kode di file yang berbeda kita harus memasukan 
 modul nya terlebih dahulu ke file main atau file inti */
 fn main() {
@@ -20,9 +25,9 @@ fn main() {
 }
 #[test]
 fn teknologi() {
-    mobil::info();
-    motor::info();
-    sepeda::info();
+    transportasi::mobil::info();
+    transportasi::motor::info();
+    transportasi::sepeda::info();
 }
 
 type Meter = f64;
@@ -44,4 +49,17 @@ fn e() {
     let g = speed(100.0, 9.58);
     println!("Kecepatan rata-rata: {:.2} m/s", v);
     println!("Kecepatan rata-rata: {:.2} k/h", g);
+}
+
+#[test]
+fn permesinan() {
+    let mesin = Mesin{
+        karbulator: String::from("Daytona"),
+        piston: String::from("Brt"),
+        kopling: String::from("Yamanah"),
+
+    };
+    
+    mesin.pengapian(true);
+    motor::info();
 }
