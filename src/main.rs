@@ -2,11 +2,13 @@ mod admin;
 mod client;
 mod matematika;
 mod kendaraan;
+mod member;
 
 use kendaraan as transportasi;
 
 use crate::kendaraan::*;
 use crate::kendaraan::Mesin;
+use crate::member::{Feature, Level};
 
 /*untuk penggunaan kode di file yang berbeda kita harus memasukan 
 modul nya terlebih dahulu ke file main atau file inti */
@@ -62,4 +64,54 @@ fn permesinan() {
     
     mesin.pengapian(true);
     motor::info();
+}
+/*Jadi disini aku mengimplementasikan enum dengan trait ya */
+#[test]
+fn feature() {
+    let member = Level::Premium;
+    member.rician(Level::Premium);
+    member.limit(String::from("Premium"));
+    member.unlimited();
+
+}
+trait Sop {
+    fn salam(&self);
+    fn penawaran(&self, varian: String);
+}
+
+struct Hisana{
+    nama_gerai: String,
+    lokasi: String,
+}
+
+impl Sop for Hisana {
+    fn salam(&self) {
+        println!("Selamat datang hisana selalu hangat");
+    }
+
+    fn penawaran(&self, varian: String) {
+        println!("Barangkali mau nambah varian {}", varian);
+    }
+}
+
+#[test]
+fn pelayanan() {
+    let kasir = Hisana{
+        nama_gerai: String::from("Ciparay"),
+        lokasi: String::from("Bandung selatan")
+    };
+
+    kasir.salam();
+    kasir.penawaran(String::from("Kentang"));
+}
+
+/*Penggunaan trait pada parameter */
+fn test_parameter(kacab: impl Sop) {
+    kacab.salam();
+    kacab.penawaran(String::from("Jamur enoki"));
+}
+
+#[test]
+fn futur() {
+    test_parameter(Hisana {nama_gerai: String::from("Ciperna"), lokasi: String::from("Kuningan")});
 }

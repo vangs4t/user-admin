@@ -19,7 +19,10 @@ pub struct Mesin{
     pub piston: String,
     pub kopling: String,
 }
-
+/*Untuk membuat trait terlihat secara publik caranya sama seperti 
+struct dll
+kalo trait nya udah publik methodnya juga otomatis public 
+tanpa perlu menambahkan pub lagi */
 pub trait Fungsi{
     fn pengapian(&self, busi: bool);
 }
