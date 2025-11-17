@@ -4,6 +4,9 @@ mod matematika;
 mod kendaraan;
 mod member;
 
+use std::fmt::format;
+use std::result;
+
 use kendaraan as transportasi;
 
 use crate::kendaraan::*;
@@ -115,3 +118,158 @@ fn test_parameter(kacab: impl Sop) {
 fn futur() {
     test_parameter(Hisana {nama_gerai: String::from("Ciperna"), lokasi: String::from("Kuningan")});
 }
+
+
+trait Hewan {
+    fn info(&self);
+}
+
+trait Sound{
+    fn say_hello(&self) {
+        println!("Halo Dari rust");
+    }
+    fn suara(&self);
+    
+}
+
+struct Anjing;
+struct Kucing{
+    nama: String,
+}
+
+
+impl Sound for Anjing{
+    fn suara(&self) {
+        println!("Guk guk");
+    }
+}
+
+impl Sound for Kucing {
+    fn say_hello(&self) {
+        println!("Halo nama saya {}", self.nama);
+    }
+    fn suara(&self) {
+        println!("Meong meng");
+    }
+}
+
+#[test]
+fn suara_hewan() {
+    let anjing = Anjing;
+
+
+    anjing.suara();
+
+
+    let kucing = Kucing{
+        nama: String::from("Nekonya"),
+    };
+
+
+    kucing.suara();
+    kucing.say_hello();
+}
+
+trait HitungLuas{
+    fn luas(&self) -> f64;
+}
+
+struct Persegi{
+    sisi: f64,
+}
+struct Lingkaran{
+    radius: f64,
+}
+
+impl HitungLuas for Persegi {
+    fn luas(&self) -> f64 {
+        self.sisi * self.sisi
+    }
+}
+impl HitungLuas for Lingkaran {
+    fn luas(&self) -> f64 {
+        3.14 * self.radius
+    }
+}
+
+#[test]
+fn test_luas() {
+    let result = Lingkaran{ radius: 16.0};
+    println!("{}", result.luas());
+    let result1 = Persegi{ sisi:18.0};
+    result1.luas();
+    println!("{}", result1.luas());
+}
+
+trait Transportasi {
+    fn info(&self);
+}
+
+struct Mobil {
+    merk: String,
+}
+
+struct Motor {
+    merk: String,
+}
+
+impl Transportasi for Mobil {
+    fn info(&self) {
+        println!("Ini kendaraan roda 4");
+    }
+}
+
+impl Transportasi for Motor {
+   fn info(&self) {
+        println!("Ini kendaraan roda 2");
+    }
+}
+
+fn tampilkan_kendaraan(k: &dyn Transportasi) {
+    k.info();
+}
+
+#[test]
+fn test_kendaraan() {
+    let mobil = Mobil{
+        merk:String::from("Daihatsu"),
+    };
+    tampilkan_kendaraan(&mobil);
+    let motor = Motor{
+        merk:String::from("Yamaha"),
+    };
+    tampilkan_kendaraan(&motor);
+}
+
+trait Deskripsi {
+    fn deskripsi(&self);
+}
+
+impl Deskripsi for i32 {
+    fn deskripsi(&self) {
+        println!("Ini angka primitive {}", self.abs());
+    }
+}
+
+impl Deskripsi for bool {
+    fn deskripsi(&self) {
+        println!("Ini kondisi {}", self);
+    }
+}
+
+impl Deskripsi for String {
+    fn deskripsi(&self) {
+        println!("Ini data yang disimpan di heap {}", self.to_uppercase());
+    }
+}
+
+#[test]
+fn test_deskripsi() {
+    let no: i32 = 10;
+    no.deskripsi();
+    let konsidi: bool = true;
+    konsidi.deskripsi();
+    let strr = String::from("Kanjut");
+    strr.deskripsi();
+}
+
