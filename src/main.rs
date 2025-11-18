@@ -4,7 +4,7 @@ mod matematika;
 mod kendaraan;
 mod member;
 
-use std::fmt::format;
+use std::fmt::{Debug, Display, format};
 use std::result;
 
 use kendaraan as transportasi;
@@ -273,3 +273,111 @@ fn test_deskripsi() {
     strr.deskripsi();
 }
 
+fn min_value<T: PartialOrd>(x: T, y: T) -> T{
+    if x > y {
+        y
+    } else {
+        x
+    }
+}
+
+fn compare_print<T: Display + PartialOrd>(a: T, b: T){
+    if a > b {
+        println!("A lebih besar dari B");
+    } else if a < b{
+        println!("B lebih besar dari A");
+    } else {
+        println!("Sama");
+    }
+}
+
+#[test]
+fn perbadingan() {
+    let a = min_value(12, 6);
+    let b = min_value(12.2, 6.2);
+    let c = Wrapper{
+        value: "Kanjut"
+    };
+    let d = Response::Succes(12);
+    println!("{}, {}",a,b);
+}
+
+struct Wrapper<T>{
+    value: T
+}
+
+impl<T: Debug> Wrapper<T> {
+    // fn show(&self){
+    //     println!("{}", self.value);
+    // }
+    fn print_debug(&self){
+        println!("{:?}", self.value);
+    }
+}
+
+enum Response<T> {
+    Succes(T),
+    Error(String),
+}
+
+impl<T> Response<T> {
+    fn process(x: bool) -> Response<i32>{
+        match x {
+            x => Response::Succes(12),
+            x => Response::Error(String::from("Gagal")),
+        } 
+    }
+}
+
+fn max_value<T: PartialOrd>(x: T, y: T) -> T{
+    if x > y {
+        x
+    } else {
+        y
+    }
+}
+
+#[test]
+fn latihan_2() {
+    let pertama = max_value(20, 13);
+    println!("{}", pertama);
+    let arr = Wrapper{
+        value: [1,2,3,4,5],
+    };
+    arr.print_debug();
+    describe(String::from("Kanjut?"));
+    
+}   
+
+fn describe<T>(value: T)
+where
+    T: Debug + Display,
+{
+    println!("{:?}", value);
+    println!("{}", value.to_string());
+}
+
+trait ToNumber {
+    fn to_number(&self) -> i32;
+}
+impl ToNumber for bool {
+    fn to_number(&self) -> i32 {
+        if *self {1} else {0}
+    }
+}
+impl ToNumber for u32 {
+    fn to_number(&self) -> i32 {
+        *self as i32
+    }
+}
+
+fn sum_two<T: ToNumber>(a: T, b: T) -> i32 {
+    a.to_number() + b.to_number()
+}
+#[test]
+fn latihan_4() {
+    let result = sum_two(13, 14);
+    let hasil = sum_two(true, false);
+
+    println!("{},{}",result, hasil);
+}
