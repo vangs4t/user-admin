@@ -3,6 +3,7 @@ mod client;
 mod matematika;
 mod kendaraan;
 mod member;
+mod market;
 
 use std::fmt::{Debug, Display, format};
 use std::result;
@@ -12,6 +13,7 @@ use kendaraan as transportasi;
 use crate::kendaraan::*;
 use crate::kendaraan::Mesin;
 use crate::member::{Feature, Level};
+use crate::market::*;
 
 /*untuk penggunaan kode di file yang berbeda kita harus memasukan 
 modul nya terlebih dahulu ke file main atau file inti */
@@ -380,4 +382,178 @@ fn latihan_4() {
     let hasil = sum_two(true, false);
 
     println!("{},{}",result, hasil);
+}
+
+fn panjang(s: &String) -> usize{
+    s.len()
+}
+
+struct Akun{
+    username: String,
+    level: u32,
+}
+
+impl Akun {
+    fn info(&self){
+        println!("Username: {}", self.username);
+        println!("Level: {}", self.level);
+    }
+    fn level_up(&mut self){
+        self.level +=1;
+    }
+}
+
+enum StatusLogin{
+    Succes(String),
+    Error(String),
+}
+
+fn proses_login(username: &str, password: &str) -> StatusLogin{
+        if password.eq("admin") {
+            StatusLogin::Succes(String::from("Selamat datang admin"))
+        } else {
+            StatusLogin::Error(String::from("Akun tidak tersedia"))
+        }
+    }
+
+
+trait Hitung{
+    fn hitung(&self) -> i32;
+}
+
+impl Hitung for i32 {
+    fn hitung(&self) -> i32 {
+        *self
+    }
+}
+impl Hitung for bool {
+    fn hitung(&self) -> i32 {
+        if *self{
+            1
+        } else {
+            0
+        }
+    }
+}
+
+trait Hewans{
+    fn suara(&self);
+    
+}
+
+struct Husky;
+struct Persian;
+
+
+impl Sound for Husky{
+    fn suara(&self) {
+        println!("Guk guk");
+    }
+}
+
+impl Sound for Persian {
+    fn suara(&self) {
+        println!("Meong meng");
+    }
+}
+
+fn mins_value<T: PartialOrd>(x: T, y: T) -> T{
+    if x < y {
+        x
+    } else {
+        y
+    }
+}
+
+struct Boxx<T> {
+    item: T,
+}
+
+impl<T: Display> Boxx<T> {
+    fn show(&self){
+        println!("the value: {}", self.item);
+    }
+}
+
+enum ResultKu<T> {
+    Ok(T),
+    Err(String),
+}
+
+impl<T> ResultKu<T> {
+    fn unwrap(self) -> T {
+        match self {
+            Self::Ok(value) => value,
+            Self::Err(msg) => panic!("{}", msg)
+        }
+    }
+}
+
+fn describes<T>(value: T) where T: Debug + Display + PartialOrd{
+    // let mut result = String::from("Kanjut?");
+    println!("{:?}", value);
+    println!("{}", value);
+    if value.to_string() > "".to_string() {
+        println!("Ini sukses")
+    }
+}
+
+
+#[test]
+fn references() {
+    let s = String::from("Hisana");
+    let mut player = Akun{ username: String::from("Ciyss"), level: 3 };
+    let anjing = Husky;
+    let kucing = Persian;
+    let nomor = mins_value(12, 14);
+    let floating = mins_value(12.4, 14.4);
+    let strr = mins_value("x", "yy");
+    let result = proses_login("jhon", "admin");
+    let number = 10;
+    let kondisi = true;
+    let generik = Boxx{ item: "Kanjut?"};
+    let result:ResultKu<i32> = ResultKu::Ok(100);
+
+    result.unwrap();
+    describe("Kanjut terbang");
+
+    generik.show();
+    println!("{},{},{}",nomor,floating,strr);
+
+    kucing.suara();
+    anjing.suara();
+    println!("{}", kondisi.hitung());
+
+    println!("level: {}", player.level);
+
+    player.level_up();
+
+    println!("level: {}", player.level);
+
+    panjang(&s); // parameter bisa dipanggil dengan references
+    panjang(&s.clone()); // meskipun pake clone tetep harus pake references karena settingan parameternya references
+}
+
+use crate::market::{Barang, Keranjang};
+use crate::market::Harga;
+
+#[test]
+fn point_of_sales() {
+    let barang = Barang::Buku { judul: String::from("Hijau bumi"), harga: 12000 };
+    let barang1 = Barang::Buku { judul: String::from("Hitam bumi"), harga: 13000 };
+    let barang2 = Barang::Pensil { jenis: String::from("Hitam bumi"), harga: 13000 };
+
+
+    println!("buku ini seharga: {}", barang.harga());
+    
+    // Keranjang hanya bisa berisi tipe yang implement Harga (seperti Barang)
+    let mut troli: Keranjang<Barang> = Keranjang {
+        item: vec![]
+    };
+    
+    // Sekarang troli bisa akses method tambah dan total_harga
+    troli.tambah(barang);
+    troli.tambah(barang1);
+    troli.tambah(barang2);
+    println!("total harga: {}", troli.total_harga());
 }
