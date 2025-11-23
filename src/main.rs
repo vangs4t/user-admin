@@ -445,13 +445,13 @@ struct Husky;
 struct Persian;
 
 
-impl Sound for Husky{
+impl Hewans for Husky{
     fn suara(&self) {
         println!("Guk guk");
     }
 }
 
-impl Sound for Persian {
+impl Hewans for Persian {
     fn suara(&self) {
         println!("Meong meng");
     }
@@ -556,4 +556,129 @@ fn point_of_sales() {
     troli.tambah(barang1);
     troli.tambah(barang2);
     println!("total harga: {}", troli.total_harga());
+}
+
+// use std::fmt::Debug;
+// formatter
+struct Weapon{
+    name: String,
+    damage: u32,
+}
+
+impl Debug for Weapon {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Weapons")
+        .field("Nama: ", &self.name)
+        .field("Damage: ", &self.damage)
+        .finish()
+    }   
+}
+/*Kebanyakan format debug digunakan untuk tipe data 
+yang cukup kompleks seperti array, struct dll
+sedangkan format Display untuk tipe data sederhana atau primitive
+seperti number, string, dll */
+#[test]
+fn useable() {
+    let weapon = Weapon{
+        name: String::from("Destroyer"),
+        damage: 100
+    };
+
+    println!("{:?}", weapon);
+    let result = |value: i32| -> i32{
+        value * 2
+    };
+
+    let hasil = result(6);
+    println!("{hasil}");
+
+}
+
+// Closure atau anonymous function
+
+#[test]
+fn test_anonymous_function() {
+    let nama = "Naufal";
+    let umur = 20;
+
+    println!("Nama: {}", nama);
+    println!("Umur: {:02}", umur);
+    println!("Biner umur: {:b}", umur);
+    println!("Lebar 10 rata kanan: {:>10}", nama);
+    println!("Lebar 10 rata kiri: {:<10}", nama);
+    let result = info_produk(800, "Gadged", 12_000_000);
+    println!("{}",result);
+}
+
+fn info_produk(id: u32, nama: &str, harga: u32) -> String {
+    format!("[ID: {id}] Produk: {nama} - Harga: Rp. {harga}"
+)
+}
+
+
+
+
+fn apply_twice<F>(x: i32, f: F) -> i32
+where
+    F: Fn(i32) -> i32,
+{
+    f(1) + x
+}
+
+#[test]
+fn mainini() {
+    let hasil = apply_twice(3, |n| n + 1); 
+    println!("{}", hasil);
+    // harus menghasilkan 5
+}
+
+#[test]
+fn vektors() {
+    let num = vec![1,2,3,4,5,6];
+    let mut new_num: Vec<i32> = vec![];
+    for number in num {
+        if number % 2 == 0{
+            new_num.push(number * 10);
+        }
+    }
+    println!("{:?}", new_num);
+}
+
+#[test]
+fn folds() {
+    let angka = vec![3,5,7];
+    let hasil = angka.iter().fold(0, |acc, x| acc + x);
+    println!("{}", hasil);
+}
+
+#[test]
+fn enumerates() {
+    let data = vec!["apel", "jeruk", "mangga"];
+    let result = data.iter().enumerate();
+
+    for datas in result {
+        println!("{:?}", datas);
+    }
+}
+
+#[test]
+fn zipper() {
+    let a = vec!["Nama", "Usia", "Kota"];
+    let b = vec!["Naufal", "20", "Bandung"];
+
+    let mut c = a.into_iter().zip(b);
+
+    for zip in c {
+        println!("{:?}", zip);
+    }
+}
+
+#[test]
+fn merger() {
+    let a = vec![1,2,3];
+    let b = vec![4,5,6];
+
+    let mut c = a.into_iter().chain(b);
+    
+    println!("{:?}", c);
 }
